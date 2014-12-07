@@ -28,78 +28,200 @@ https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml
 ## One Class per File
   
 ```javascript
-  /* avoid - same file vehicle.js */
-  class Sedan {
-    constructor() {
-      ...
-    }
-      
-    drive() {
-      ...
-    }
+/* avoid - same file vehicle.js */
+class Sedan {
+  constructor() {
+    ...
+  }
+    
+  drive() {
+    ...
+  }
+}
+
+class Coupe {
+  constructor() {
+    ...
+  }
+    
+  drive() {
+    ...
+  }
+}
+  
+class Truck {
+  constructor() {
+    ...
   }
   
-  class Coupe {
-    constructor() {
-      ...
-    }
-      
-    drive() {
-      ...
-    }
+  drive() {
+    ...
   }
-    
-  class Truck {
-    constructor() {
-      ...
-    }
-    
-    drive() {
-      ...
-    }
-  }
+}
 ```
 
 ```javascript
-  /* recommend - seperate files for each class */
-  
-  /* sedan.js */
-  class Sedan {
-    constructor() {
-      ...
-    }
-      
-    drive() {
-      ...
-    }
+/* recommend - seperate files for each class */
+
+/* sedan.js */
+class Sedan {
+  constructor() {
+    ...
   }
-  
-  /* coupe.js */
-  class Coupe {
-    constructor() {
-      ...
-    }
-      
-    drive() {
-      ...
-    }
-  }
-  
-  /* truck.js */    
-  class Truck {
-    constructor() {
-      ...
-    }
     
-    drive() {
-      ...
-    }
+  drive() {
+    ...
   }
+}
+
+/* coupe.js */
+class Coupe {
+  constructor() {
+    ...
+  }
+    
+  drive() {
+    ...
+  }
+}
+
+/* truck.js */    
+class Truck {
+  constructor() {
+    ...
+  }
+  
+  drive() {
+    ...
+  }
+}
 ```
 
 **[Back to top](#table-of-contents)**
 
 ## Private Functions and Properties
+
+- **Private Functions and Properties**: There are not accesors in JavaScript like there are in say Java ("private", "public", etc.).  There are ways to encapsulate functions and properties using closures (see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures).  I recommend against this in favor of following the Google Style Guide naming convension for private functions and properties, but allowing them to remain public.
+  
+  *Why?*: Using closures to encapsulate functions causes issues when using "this" within the context of the private function.  The value of "this" is no longer the instance of the class within the context of the private function.  In order to get a handle to the instance of the class inside a private function, you have to pass the instance as a parameter of the private function.  Even worse, if you have a private function that calls another private function that needs to access the instance of the class, you have to pass the instance down to that function as well and so on.  This style guide makes a trade off to NOT create true private functions to avoid the pain of passing around the instance of the current class.
+
+```javascript
+/* avoid - client side example with true private functions and properties with a closure */ 
+/* Using the IIFE pattern (see #5 here: http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailnamespacing) */
+(function() {
+  var privateProperty = 'hello world';
+  
+  function privateFunction(instance) {
+    if(instance.isRunning) {
+      ...
+    }
+  }
+  
+  class Car {
+    constructor() {
+      ...
+    }
+    
+    get isRunning() {
+    }
+    
+    drive() {
+      // We must pass the "this" (the current instance) to the private function
+      privateFunction(this);
+      ...
+    }
+  }
+  
+  window.vehicles = {};
+  window.vehicles.Car = Car;
+})();
+```
+
+```javascript
+/* avoid - node.js example with true private functions and properties, require.js provides closure */ 
+var privateProperty = 'hello world';
+
+function privateFunction(instance) {
+  if(instance.isRunning) {
+    ...
+  }
+}
+
+class Car {
+  constructor() {
+    ...
+  }
+  
+  get isRunning() {
+  }
+  
+  drive() {
+    // We must pass the "this" (the current instance) to the private function
+    privateFunction(this);
+    ...
+  }
+}
+
+module.exports = Car;
+```
+
+```javascript
+/* recommend - client side example using naming convention for private functions and properties */ 
+/* Still using IIFE to avoid polluting global namespace (window) */
+(function() {
+  class Car {
+    constructor() {
+      this.privateProperty_ = 'hello world';
+      ...
+    }
+    
+    privateFunction_() {
+      if(this.isRunning) {
+        ...
+      }
+    }
+    
+    get isRunning() {
+    }
+    
+    drive() {
+      // We do NOT need to pass the "this" to the private function
+      this.privateFunction();
+      ...
+    }
+  }
+  
+  window.vehicles = {};
+  window.vehicles.Car = Car;
+})();
+```
+
+```javascript
+/* recommend - node.js example using naming convention for private functions and properties */ 
+class Car {
+  constructor() {
+    this.privateProperty_ = 'hello world';
+    ...
+  }
+  
+  privateFunction_() {
+    if(this.isRunning) {
+      ...
+    }
+  }
+  
+  get isRunning() {
+  }
+  
+  drive() {
+    // We do NOT need to pass the "this" to the private function
+    this.privateFunction();
+    ...
+  }
+}
+
+module.exports = Car;
+```
 
 **[Back to top](#table-of-contents)**
 
