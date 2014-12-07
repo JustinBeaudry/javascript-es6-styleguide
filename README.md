@@ -341,4 +341,75 @@ class Car {
 
 ## Using Arrow Functions to Preserve "this"
 
+**Using Arrow Functions to Preserve "this"**: When using anonymous functions, use arrow functions.
+
+*Why?*: Arrow functions lexically bind the "this" value.  When used inside the context of a class, you can access "this" and it will be the instance of the class.
+
+*Why?*: Using arrow functions help avoid having to assign "this" to a variable to then be used inside the anonymous function closure.
+
+```javascript
+/* avoid */ 
+class Car {
+  constructor() {
+    isRunning_ = false;
+    ...
+  }
+  
+  get isRunning() {
+    return isRunning_;
+  }
+  
+  start_(callback) {
+    if(callback) {
+      callback();
+    }
+    ...
+  }
+  
+  drive() {
+    // assigning "this" to "instance" to be used inside the anonymous function
+    var instance = this;
+    var callback = function() {
+      if(instance.isRunning) {
+        ...
+      }
+    };
+    
+    this.start_(callback);
+  }
+}
+```
+
+```javascript
+/* recommend */ 
+class Car {
+  constructor() {
+    isRunning_ = false;
+    ...
+  }
+  
+  get isRunning() {
+    return isRunning_;
+  }
+  
+  start_(callback) {
+    if(callback) {
+      callback();
+    }
+    ...
+  }
+  
+  drive() {
+    // using arrow function for callback
+    var callback = () => {
+      if(this.isRunning) {
+        ...
+      }
+    };
+    
+    this.start_(callback);
+  }
+}
+```
+
 **[Back to top](#table-of-contents)**
