@@ -70,7 +70,7 @@ class Truck {
 ```
 
 ```javascript
-/* recommend - seperate files for each class */
+/* recommend - separate files for each class */
 
 /* sedan.js */
 class Sedan {
