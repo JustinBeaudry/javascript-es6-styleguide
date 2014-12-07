@@ -15,7 +15,7 @@ https://github.com/johnpapa/angularjs-styleguide
   1. [One Class per File](#one-class-per-file)
   1. [Private Functions and Properties](#private-functions-and-properties)
   1. [Class Structure](#class-structure)
-  1. [Using Arrow Functions to Preserve "this"](#using-arrow-functions-to-preserve-"this")
+  1. [Using Arrow Functions to Preserve "this"](#using-arrow-functions-to-preserve-this)
   
 ## Google JavaScript Style Guide
 
