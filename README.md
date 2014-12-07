@@ -1,6 +1,6 @@
-# ES6 JavaScript Style Guide
+# JavaScript ES6 Style Guide
 
-*Opinionated ES6 JavaScript style guide for teams by [@tim_walker](//twitter.com/tim_walker)*
+*Opinionated JavaScript ES6 style guide for teams by [@tim_walker](//twitter.com/tim_walker)*
 
 This style guide is specific to new ES6 features in JavaScript and is based on Google's JavaScript Style Guide. This is meant to be a starting point for teams to maintain consistency with new ES6 features, especially around OO programming with classes.
 
