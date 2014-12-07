@@ -20,7 +20,7 @@ https://github.com/johnpapa/angularjs-styleguide
   
 ## Google JavaScript Style Guide
 
-As mentioned above, this style guide builds on Google's JavaScript Style Guide.  You will want to review this style guide to give you some context for conventions used in this style guide: 
+**Google JavaScript Style Guide**: As mentioned above, this style guide builds on Google's JavaScript Style Guide.  You will want to review this style guide to give you some context for conventions used in this style guide: 
 
 https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml
 
@@ -28,16 +28,20 @@ https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml
 
 ## IIFE
 
-You will see the IIFE (immediately invoked function expression) pattern used in some of the examples.  To better understand this pattern and why its used see the following: 
+**IIFE**: You will see the IIFE (immediately invoked function expression) pattern used in some of the examples.  To better understand this pattern and why its used see the following: 
 
 http://addyosmani.com/resources/essentialjsdesignpatterns/book/#detailnamespacing (see #5)
 
 **[Back to top](#table-of-contents)**
 
 ## One Class per File
-  
+
+**One Class per File**: Only one class should be declared per file and the file name should match the class name.  If the class is named "Car" then the file should be named "car.js".
+
+*Why?*: By only having one class per file and naming the class and the file the same, you make it much easier to find class declarations by simply browsing your project.  Having multiple classes inside of one file also becomes a maintenance nightmare for a handful of reasons.
+
 ```javascript
-/* avoid - same file vehicle.js */
+/* avoid - all the classes below are container in a file called vehicle.js */
 class Sedan {
   constructor() {
     ...
@@ -110,9 +114,9 @@ class Truck {
 
 ## Private Functions and Properties
 
-- **Private Functions and Properties**: There are not accesors in JavaScript like there are in say Java ("private", "public", etc.).  There are ways to encapsulate functions and properties using closures (see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures).  I recommend against this in favor of following the Google Style Guide naming convention for private functions and properties, and allow them to remain public.
+**Private Functions and Properties**: There are not accesors in JavaScript like there are in say Java ("private", "public", etc.).  There are ways to encapsulate functions and properties using closures (see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures).  I recommend against this in favor of following the Google Style Guide naming convention for private functions and properties, and allow them to remain public.
   
-  *Why?*: Using closures to encapsulate functions causes issues when using "this" within the context of the private function.  The value of "this" is no longer the instance of the class within the context of the private function.  In order to get a handle to the instance of the class inside a private function, you have to pass the instance as a parameter of the private function.  Even worse, if you have a private function that calls another private function that needs to access the instance of the class, you have to pass the instance down to that function as well and so on.  This style guide makes a trade off to NOT create true private functions to avoid the pain of passing around the instance of the current class.
+*Why?*: Using closures to encapsulate functions causes issues when using "this" within the context of the private function.  The value of "this" is no longer the instance of the class within the context of the private function.  In order to get a handle to the instance of the class inside a private function, you have to pass the instance as a parameter of the private function.  Even worse, if you have a private function that calls another private function that needs to access the instance of the class, you have to pass the instance down to that function as well and so on.  This style guide makes a trade off to NOT create true private functions to avoid the pain of passing around the instance of the current class.
 
 ```javascript
 /* avoid - client side example with true private functions and properties */ 
@@ -235,6 +239,103 @@ module.exports = Car;
 **[Back to top](#table-of-contents)**
 
 ## Class Structure
+
+**Class Structure**: Inside of a class, group functions and properties in the follow order:
+- constructor
+  - private properties
+  - public properties
+- get/set functions (keep get/set together for same property, with the get before the set, even if one is private and the other is public)
+- private functions
+- public functions
+
+*Why?*: Grouping functions and properties based on type and private/public makes a file extremely easy to browse through and improves maintainability.
+
+*Why?*: For get/set functions, even if one is private and the other is public, you want to keep them together.  Breaking up related get/set functions become a maintainability problem.
+
+```javascript
+/* avoid */ 
+class Car {
+  // public function
+  start() {
+    ...
+  }
+  
+  // public getter
+  get isRunning() {
+    return isRunning_;
+  }
+  
+  // constructor
+  constructor() {
+    this.publicProperty = 'foo';  // public
+    this.privateProperty_ = 'bar'; // private
+    this.publicPropertyTwo = 2;  // public
+    this.isRunning_ = false; //private
+    ...
+  }
+  
+  // public setter
+  set isRunning(value) {
+    isRunning_ = value;
+  }
+  
+  // private function
+  privateFunction_() {
+    if(this.isRunning) {
+      ...
+    }
+  }
+  
+  // public function
+  drive() {
+    this.privateFunction_();
+    ...
+  }
+}
+```
+
+```javascript
+/* recommend */ 
+class Car {
+  // constructor
+  constructor() {
+    this.privateProperty_ = 'bar'; // private
+    this.isRunning_ = false; //private
+    
+    this.publicProperty = 'foo';  // public
+    this.publicPropertyTwo = 2;  // public
+    ...
+  }
+  
+  // public getter
+  get isRunning() {
+    return isRunning_;
+  }
+  
+  // public setter
+  set isRunning(value) {
+    isRunning_ = value;
+  }
+  
+  // private function
+  privateFunction_() {
+    if(this.isRunning) {
+      ...
+    }
+  }
+  
+  // public function
+  start() {
+    ...
+  }
+  
+  // public function
+  drive() {
+    this.privateFunction_();
+    ...
+  }
+}
+```
 
 **[Back to top](#table-of-contents)**
 
