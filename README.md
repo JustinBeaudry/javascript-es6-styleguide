@@ -16,6 +16,7 @@ https://github.com/johnpapa/angularjs-styleguide
   1. [One Class per File](#one-class-per-file)
   1. [Private Functions and Properties](#private-functions-and-properties)
   1. [Class Structure](#class-structure)
+  1. [Dependencies](#dependencies)
   1. [Using Arrow Functions to Preserve "this"](#using-arrow-functions-to-preserve-this)
   1. [Callbacks](#callbacks)
   
@@ -336,6 +337,122 @@ class Car {
     ...
   }
 }
+```
+
+**[Back to top](#table-of-contents)**
+
+## Dependencies
+
+**Dependencies**: Dependenies of the class should be at the very top of the file (assuming you are not using a DI framework that uses something like constructor injection)
+
+*Why?*: It needs to be clear what the dependecies of the class are.  This is very important to both testing and maintenance.
+
+```javascript
+/* avoid - client side example */ 
+(function() {
+  class Car {
+    constructor() {
+      var Dependency = window.someNamespace.Dependency;
+      this.dependency_ = new Dependency();
+      ...
+    }
+    
+    drive() {
+      this.dependency_.foo();
+      ...
+    }
+    
+    start() {
+      var AnotherDependency = window.someNamespace.AnotherDependency;
+      var anotherDependency = new AnotherDependency();
+      anotherDependency.bar();
+      ...
+    }
+  }
+  
+  window.vehicles = {};
+  window.vehicles.Car = Car;
+})();
+```
+
+```javascript
+/* avoid - node.js example */ 
+class Car {
+  constructor() {
+    var Dependency = require('dependency');
+    this.dependency_ = new Dependency();
+    ...
+  }
+  
+  drive() {
+    this.dependency_.foo();
+    ...
+  }
+  
+  start() {
+      var AnotherDependency = require('another-dependency');
+      var anotherDependency = new AnotherDependency();
+      anotherDependency.bar();
+      ...
+    }
+}
+
+module.exports = Car;
+```
+
+```javascript
+/* recommend - client side example */ 
+(function() {
+  var Dependency = window.someNamespace.Dependency;
+  var AnotherDependency = window.someNamespace.AnotherDependency;
+  
+  class Car {
+    constructor() {
+      this.dependency_ = new Dependency();
+      this.anotherDependency_ = new AnotherDependency();
+      ...
+    }
+    
+    drive() {
+      this.dependency_.foo();
+      ...
+    }
+    
+    start() {
+      this.anotherDependency_.bar();
+      ...
+    }
+  }
+  
+  window.vehicles = {};
+  window.vehicles.Car = Car;
+})();
+```
+
+```javascript
+/* recommend - node.js example */ 
+var Dependency = require('dependency');
+var AnotherDependency = require('another-dependency');
+
+class Car {
+  constructor() {
+    this.dependency_ = new Dependency();
+    this.anotherDependency_ = new AnotherDependency();
+    ...
+  }
+  
+  drive() {
+    this.dependency_.foo();
+    ...
+  }
+  
+  start() {
+      this.anotherDependency_.bar();
+      ...
+    }
+}
+
+module.exports = Car;
 ```
 
 **[Back to top](#table-of-contents)**
