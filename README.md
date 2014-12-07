@@ -17,6 +17,7 @@ https://github.com/johnpapa/angularjs-styleguide
   1. [Private Functions and Properties](#private-functions-and-properties)
   1. [Class Structure](#class-structure)
   1. [Using Arrow Functions to Preserve "this"](#using-arrow-functions-to-preserve-this)
+  1. [Callbacks](#callbacks)
   
 ## Google JavaScript Style Guide
 
@@ -114,8 +115,8 @@ class Truck {
 
 ## Private Functions and Properties
 
-**Private Functions and Properties**: There are not accesors in JavaScript like there are in say Java ("private", "public", etc.).  There are ways to encapsulate functions and properties using closures (see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures).  I recommend against this in favor of following the Google Style Guide naming convention for private functions and properties, and allow them to remain public.
-  
+**Private Functions and Properties**: JavaScript does not have accesors like OO languages like Java (i.e. "private", "public", etc.).  There are ways to encapsulate functions and properties using closures (see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures).  I recommend against this in favor of following the Google Style Guide naming convention for private functions and properties, and allow them to remain public.
+
 *Why?*: Using closures to encapsulate functions causes issues when using "this" within the context of the private function.  The value of "this" is no longer the instance of the class within the context of the private function.  In order to get a handle to the instance of the class inside a private function, you have to pass the instance as a parameter of the private function.  Even worse, if you have a private function that calls another private function that needs to access the instance of the class, you have to pass the instance down to that function as well and so on.  This style guide makes a trade off to NOT create true private functions to avoid the pain of passing around the instance of the current class.
 
 ```javascript
@@ -408,6 +409,78 @@ class Car {
     };
     
     this.start_(callback);
+  }
+}
+```
+
+**[Back to top](#table-of-contents)**
+
+## Callbacks
+
+**Callbacks**: If a callback is too large, instead of using an anonymous arrow function, use a private class function.  There is not black and white definition for a long running function. Be pragmatic, it should be clear when a function is too long.
+
+*Why?*: Long running anonymous arrow functions can make your code hard to read and maintain.  No different than any other long running function.
+
+```javascript
+/* avoid */ 
+class Car {
+  constructor() {
+  }
+  
+  start_(callback) {
+    if(callback) {
+      callback();
+    }
+    ...
+  }
+  
+  drive() {
+    var callback = () => {
+      ...
+      ...
+      ...
+      ...
+      ...
+      ...
+      ...
+      ...
+      ...
+      ...
+    };
+    
+    this.start_(callback);
+  }
+}
+```
+
+```javascript
+/* recommend */ 
+class Car {
+  constructor() {
+  }
+  
+  start_(callback) {
+    if(callback) {
+      callback();
+    }
+    ...
+  }
+  
+  startCallback_() {
+    ...
+    ...
+    ...
+    ...
+    ...
+    ...
+    ...
+    ...
+    ...
+    ...
+  }
+  
+  drive() {
+    this.start_(this.startCallback_);
   }
 }
 ```
