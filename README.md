@@ -352,20 +352,13 @@ class Car {
 (function() {
   class Car {
     constructor() {
-      var Dependency = window.someNamespace.Dependency;
-      this.dependency_ = new Dependency();
       ...
     }
     
     drive() {
-      this.dependency_.foo();
-      ...
-    }
-    
-    start() {
-      var AnotherDependency = window.someNamespace.AnotherDependency;
-      var anotherDependency = new AnotherDependency();
-      anotherDependency.bar();
+      var Dependency = window.someNamespace.Dependency;
+      var dependency = new Dependency();
+      dependency.foo();
       ...
     }
   }
@@ -379,22 +372,15 @@ class Car {
 /* avoid - node.js example */ 
 class Car {
   constructor() {
-    var Dependency = require('dependency');
-    this.dependency_ = new Dependency();
     ...
   }
   
   drive() {
-    this.dependency_.foo();
+    var Dependency = require('dependency');
+    var dependency = new Dependency();
+    dependency.foo();
     ...
   }
-  
-  start() {
-      var AnotherDependency = require('another-dependency');
-      var anotherDependency = new AnotherDependency();
-      anotherDependency.bar();
-      ...
-    }
 }
 
 module.exports = Car;
@@ -404,22 +390,15 @@ module.exports = Car;
 /* recommend - client side example */ 
 (function() {
   var Dependency = window.someNamespace.Dependency;
-  var AnotherDependency = window.someNamespace.AnotherDependency;
   
   class Car {
     constructor() {
       this.dependency_ = new Dependency();
-      this.anotherDependency_ = new AnotherDependency();
       ...
     }
     
     drive() {
       this.dependency_.foo();
-      ...
-    }
-    
-    start() {
-      this.anotherDependency_.bar();
       ...
     }
   }
@@ -432,12 +411,10 @@ module.exports = Car;
 ```javascript
 /* recommend - node.js example */ 
 var Dependency = require('dependency');
-var AnotherDependency = require('another-dependency');
 
 class Car {
   constructor() {
     this.dependency_ = new Dependency();
-    this.anotherDependency_ = new AnotherDependency();
     ...
   }
   
@@ -445,11 +422,6 @@ class Car {
     this.dependency_.foo();
     ...
   }
-  
-  start() {
-      this.anotherDependency_.bar();
-      ...
-    }
 }
 
 module.exports = Car;
