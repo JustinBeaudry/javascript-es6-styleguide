@@ -343,9 +343,9 @@ class Car {
 
 ## Dependencies
 
-**Dependencies**: Dependenies of the class should be at the very top of the file (assuming you are not using a DI framework that uses something like constructor injection)
+**Dependencies**: Dependencies of the class should be at the very top of the file (assuming you are not using a DI framework that uses something like constructor injection)
 
-*Why?*: It needs to be clear what the dependecies of the class are.  This is very important to both testing and maintenance.
+*Why?*: It needs to be clear what the dependencies of the class are.  This is very important to both testing and maintenance.
 
 ```javascript
 /* avoid - client side example */ 
@@ -435,7 +435,7 @@ module.exports = Car;
 
 *Why?*: Arrow functions lexically bind the "this" value.  When used inside the context of a class, you can access "this" and it will be the instance of the class.
 
-*Why?*: Using arrow functions help avoid having to assign "this" to a variable to then be used inside the anonymous function closure.
+*Why?*: Using arrow functions avoids the pattern of having to assign "this" to a variable that is then used inside the anonymous function closure.
 
 ```javascript
 /* avoid */ 
