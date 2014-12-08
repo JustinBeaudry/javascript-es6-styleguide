@@ -147,7 +147,7 @@ class Truck {
     }
   }
   
-  window.vehicles = {};
+  window.vehicles = window.vehicles || {};
   window.vehicles.Car = Car;
 })();
 ```
@@ -206,7 +206,7 @@ module.exports = Car;
     }
   }
   
-  window.vehicles = {};
+  window.vehicles = window.vehicles || {};
   window.vehicles.Car = Car;
 })();
 ```
@@ -363,7 +363,7 @@ class Car {
     }
   }
   
-  window.vehicles = {};
+  window.vehicles = window.vehicles || {};
   window.vehicles.Car = Car;
 })();
 ```
@@ -403,7 +403,7 @@ module.exports = Car;
     }
   }
   
-  window.vehicles = {};
+  window.vehicles = window.vehicles || {};
   window.vehicles.Car = Car;
 })();
 ```
