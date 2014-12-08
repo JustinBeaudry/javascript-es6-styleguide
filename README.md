@@ -15,8 +15,8 @@ https://github.com/johnpapa/angularjs-styleguide
   1. [IIFE](#iife)
   1. [One Class per File](#one-class-per-file)
   1. [Private Functions and Properties](#private-functions-and-properties)
+  1. [Dependencies](#dependencies)  
   1. [Class Structure](#class-structure)
-  1. [Dependencies](#dependencies)
   1. [Using Arrow Functions to Preserve "this"](#using-arrow-functions-to-preserve-this)
   1. [Callbacks](#callbacks)
   
@@ -240,107 +240,6 @@ module.exports = Car;
 
 **[Back to top](#table-of-contents)**
 
-## Class Structure
-
-**Class Structure**: Inside of a class, group functions and properties in the follow order:
-- constructor
-  - private properties
-  - public properties
-- get/set functions (keep get/set together for same property, with the get before the set, even if one is private and the other is public)
-- private functions
-- public functions
-
-*Why?*: Grouping functions and properties based on type and private/public makes a file extremely easy to browse through and improves maintainability.
-
-*Why?*: For get/set functions, even if one is private and the other is public, you want to keep them together.  Breaking up related get/set functions become a maintainability problem.
-
-```javascript
-/* avoid */ 
-class Car {
-  // public function
-  start() {
-    ...
-  }
-  
-  // public getter
-  get isRunning() {
-    return isRunning_;
-  }
-  
-  // constructor
-  constructor() {
-    this.publicProperty = 'foo';  // public
-    this.privateProperty_ = 'bar'; // private
-    this.publicPropertyTwo = 2;  // public
-    this.isRunning_ = false; //private
-    ...
-  }
-  
-  // public setter
-  set isRunning(value) {
-    isRunning_ = value;
-  }
-  
-  // private function
-  privateFunction_() {
-    if(this.isRunning) {
-      ...
-    }
-  }
-  
-  // public function
-  drive() {
-    this.privateFunction_();
-    ...
-  }
-}
-```
-
-```javascript
-/* recommend */ 
-class Car {
-  // constructor
-  constructor() {
-    this.privateProperty_ = 'bar'; // private
-    this.isRunning_ = false; //private
-    
-    this.publicProperty = 'foo';  // public
-    this.publicPropertyTwo = 2;  // public
-    ...
-  }
-  
-  // public getter
-  get isRunning() {
-    return isRunning_;
-  }
-  
-  // public setter
-  set isRunning(value) {
-    isRunning_ = value;
-  }
-  
-  // private function
-  privateFunction_() {
-    if(this.isRunning) {
-      ...
-    }
-  }
-  
-  // public function
-  start() {
-    ...
-  }
-  
-  // public function
-  drive() {
-    this.privateFunction_();
-    ...
-  }
-}
-```
-
-**[Back to top](#table-of-contents)**
-
 ## Dependencies
 
 **Dependencies**: Dependencies of the class should be at the very top of the file (assuming you are not using a DI framework that uses something like constructor injection)
@@ -428,6 +327,122 @@ module.exports = Car;
 ```
 
 **[Back to top](#table-of-contents)**
+
+## Class Structure
+
+**Class Structure**: Inside of a class, group functions and properties in the follow order:
+- dependencies
+- constants
+- class
+  - constructor
+    - private properties
+    - public properties
+  - get/set functions (keep get/set together for same property, with the get before the set, even if one is private and the other is public)
+  - private functions
+  - public functions
+
+*Why?*: Grouping functions and properties based on type and private/public makes a file extremely easy to browse through and improves maintainability.
+
+*Why?*: For get/set functions, even if one is private and the other is public, you want to keep them together.  Breaking up related get/set functions become a maintainability problem.
+
+```javascript
+/* avoid */ 
+class Car {
+  // public function
+  start() {
+    ...
+  }
+  
+  // public getter
+  get isRunning() {
+    return isRunning_;
+  }
+  
+  // constructor
+  constructor() {
+    this.publicProperty = 'foo';  // public
+    this.privateProperty_ = 'bar'; // private
+    this.publicPropertyTwo = 2;  // public
+    this.isRunning_ = false; //private
+    var Dependency = require('dependency'); // dependency
+    this.dependency_ = new Dependency(); // dependency instance
+    ...
+  }
+  
+  // public setter
+  set isRunning(value) {
+    isRunning_ = value;
+  }
+  
+  // private function
+  privateFunction_() {
+    if(this.isRunning) {
+      ...
+    }
+  }
+  
+  // public function
+  drive() {
+    this.privateFunction_();
+    ...
+  }
+}
+
+module.exports = Car;
+```
+
+```javascript
+/* recommend */ 
+var Dependency = require('dependency');
+
+const SOME_CONSTANT = 2;
+
+class Car {
+  // constructor
+  constructor() {
+    this.dependency_ = new Dependency(); // dependency instance
+    this.privateProperty_ = 'bar'; // private
+    this.isRunning_ = false; //private
+    
+    this.publicProperty = 'foo';  // public
+    this.publicPropertyTwo = 2;  // public
+    ...
+  }
+  
+  // public getter
+  get isRunning() {
+    return isRunning_;
+  }
+  
+  // public setter
+  set isRunning(value) {
+    isRunning_ = value;
+  }
+  
+  // private function
+  privateFunction_() {
+    if(this.isRunning) {
+      ...
+    }
+  }
+  
+  // public function
+  start() {
+    ...
+  }
+  
+  // public function
+  drive() {
+    this.privateFunction_();
+    ...
+  }
+}
+
+module.exports = Car;
+```
+
+**[Back to top](#table-of-contents)**
+
 
 ## Using Arrow Functions to Preserve "this"
 
