@@ -116,7 +116,7 @@ class Truck {
 
 ## Private Functions and Properties
 
-**Private Functions and Properties**: JavaScript does not have accessors like OO languages (i.e. private, public, protected, etc).  There are ways to encapsulate functions and properties using closures (see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures).  I recommend against this in favor of using the private naming convention from the Google JavaScript Style Guide, and allow functions and properties to remain public.
+**Private Functions and Properties**: JavaScript does not have accessors like OO languages (i.e. private, public, protected, etc).  There are ways to encapsulate functions and properties using closures (see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures).  True private functions and properties are recommended against this in favor of using the private naming convention from the Google JavaScript Style Guide, and allow functions and properties to remain public.
 
 *Why?*: Using closures to encapsulate functions causes issues when using "this" within the context of the private function.  The value of "this" is no longer the instance of the class within the context of the private function.  In order to get a reference to the instance of the class inside a private function, you have to pass the instance as a parameter of the private function.  Even worse, if you have a private function that calls another private function that needs to access the instance of the class, you have to pass the instance down to that function as well and so on.  This style guide makes a trade off to NOT create true private functions to avoid the pain of passing around the instance of the current class.
 
