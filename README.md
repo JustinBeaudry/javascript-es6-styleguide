@@ -337,8 +337,11 @@ module.exports = Car;
   - constructor
     - private properties
     - public properties
+  - static get/set functions (keep get/set together for same property, with the get before the set, even if one is private and the other is public)
   - get/set functions (keep get/set together for same property, with the get before the set, even if one is private and the other is public)
+  - static private funtions
   - private functions
+  - static public functions
   - public functions
 
 *Why?*: Grouping functions and properties based on type and private/public makes a file extremely easy to browse through and improves maintainability.
@@ -356,6 +359,16 @@ class Car {
   // public getter
   get isRunning() {
     return isRunning_;
+  }
+  
+  // static public getter
+  static get foo() {
+    ...
+  }
+  
+  // static public function
+  static bar() {
+    ...
   }
   
   // constructor
@@ -409,6 +422,11 @@ class Car {
     ...
   }
   
+  // static public getter
+  static get foo() {
+    ...
+  }
+  
   // public getter
   get isRunning() {
     return isRunning_;
@@ -424,6 +442,11 @@ class Car {
     if(this.isRunning) {
       ...
     }
+  }
+  
+  // static public function
+  static bar() {
+    ...
   }
   
   // public function
