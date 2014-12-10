@@ -568,7 +568,7 @@ class Car {
 
 **Callbacks**: If a callback has too many lines of code, instead of using an anonymous arrow function, use a private class function.  There is not a black and white definition for how many lines of code is too much for a callback or in general for a function. Be pragmatic, it should be clear when a function has too many lines of code.
 
-*Why?*: Anonymous arrow functions with too many lines of code within another function can make your code hard to read and maintain.  No different than any other function that has too many lines of code and needs to be broken up.
+*Why?*: Anonymous arrow functions with too many lines of code within another function can make your code hard to read and maintain.  This is no different than any other function that has too many lines of code and needs to be broken up.
 
 ```javascript
 /* avoid */ 
