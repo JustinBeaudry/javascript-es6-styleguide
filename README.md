@@ -494,7 +494,7 @@ module.exports = Car;
 
 *Why?*: Arrow functions lexically bind the "this" value.  When used inside the context of a class, you can access "this" and it will be the instance of the class.
 
-*Why?*: Using arrow functions avoids the pattern of having to assign "this" to a variable that is then used inside the anonymous function closure.
+*Why?*: Using arrow functions avoids the pattern of having to pass "this" to an IIFE that wraps the anonymous function.
 
 ```javascript
 /* avoid */ 
@@ -516,13 +516,14 @@ class Car {
   }
   
   drive() {
-    // assigning "this" to "instance" to be used inside the anonymous function
-    var instance = this;
-    var callback = function() {
-      if(instance.isRunning) {
-        ...
-      }
-    };
+    // have to pass this into IIFE to return callback
+    var callback = (function(instance) {
+      return function() {
+        if(instance.isRunning) {
+          ...
+        }
+      };
+    })(this);
     
     this.start_(callback);
   }
