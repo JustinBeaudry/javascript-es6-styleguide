@@ -330,21 +330,42 @@ module.exports = Car;
 
 ## Class Structure
 
-**Class Structure**: Inside of a class, group functions and properties in the follow order:
+**Class Structure**: Inside of a class, group constructs in the follow order:
 - dependencies
 - constants
 - class
   - constructor
-    - private properties
-    - public properties
-  - static get/set functions (keep get/set together for same property, with the get before the set, even if one is private and the other is public)
-  - get/set functions (keep get/set together for same property, with the get before the set, even if one is private and the other is public)
-  - static private funtions
-  - private functions
-  - static public functions
-  - public functions
+    - properties
+  - get/set functions
+  - functions
 
-*Why?*: Grouping functions and properties based on type and private/public makes a file extremely easy to browse through and improves maintainability.
+For properties and functions, order by access:
+- public
+- private
+
+For get/set functions, keep the related get and set together (regardless of access), with the get before the set:
+- get function
+- set function
+
+Last, apply order within these groups by static or non-static:
+- static
+- non-static
+
+This would result in this full structure:
+- dependencies
+- constants
+- class
+  - constructor
+    - public properties
+    - private properties
+  - static get/set functions
+  - get/set functions
+  - public static functions
+  - public functions
+  - private static functions
+  - private functions
+
+*Why?*: Grouping constructs based on type, private/public, and static/non-static makes a file extremely easy to browse through and improves maintainability.
 
 *Why?*: For get/set functions, even if one is private and the other is public, you want to keep them together.  Breaking up related get/set functions become a maintainability problem.
 
@@ -387,17 +408,17 @@ class Car {
     isRunning_ = value;
   }
   
+  // public function
+  drive() {
+    this.privateFunction_();
+    ...
+  }
+  
   // private function
   privateFunction_() {
     if(this.isRunning) {
       ...
     }
-  }
-  
-  // public function
-  drive() {
-    this.privateFunction_();
-    ...
   }
 }
 
@@ -413,12 +434,12 @@ const SOME_CONSTANT = 2;
 class Car {
   // constructor
   constructor() {
-    this.dependency_ = new Dependency(); // dependency instance
-    this.privateProperty_ = 'bar'; // private
-    this.isRunning_ = false; //private
-    
     this.publicProperty = 'foo';  // public
     this.publicPropertyTwo = 2;  // public
+    
+    this.dependency_ = new Dependency(); // private, dependency instance
+    this.privateProperty_ = 'bar'; // private
+    this.isRunning_ = false; //private
     ...
   }
   
@@ -437,13 +458,6 @@ class Car {
     isRunning_ = value;
   }
   
-  // private function
-  privateFunction_() {
-    if(this.isRunning) {
-      ...
-    }
-  }
-  
   // static public function
   static bar() {
     ...
@@ -458,6 +472,13 @@ class Car {
   drive() {
     this.privateFunction_();
     ...
+  }
+  
+  // private function
+  privateFunction_() {
+    if(this.isRunning) {
+      ...
+    }
   }
 }
 
